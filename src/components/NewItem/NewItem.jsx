@@ -1,14 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "./NewItem.css"
 
 const PRIORITY = ['low', 'medium', 'high']
 
 const NewItem = (props) => {
-    const { addItem } = props
-    const [title, setTitle] = useState('')
-    const [priority, setPriority] = useState('')
+    const { addItem, editState, editItem } = props
 
-    console.log(priority)
+    const [title, setTitle] = useState('')
+    const [priority, setPriority] = useState('medium')
+    const isEdit = Boolean(editState.id)
+
+    useEffect(() => {
+        if(editState.id) {
+            setTitle(editState.title)
+            setPriority(editState.priority)
+        }
+    }, [editState])
 
     const handleInputChange = (e) => {
         setTitle(e.target.value)
@@ -22,9 +29,21 @@ const NewItem = (props) => {
             title,
             priority
         }
-        addItem(obj)
+        
+        if(isEdit) {
+            obj.id = editState.id
+            editItem(obj)
+        } else {
+            addItem(obj)
+        }
+        
         setTitle('')
-        setPriority('')
+        setPriority('low')
+    }
+
+    const clearState = () => {
+        setTitle('')
+        setPriority('low')
     }
 
     return (
@@ -32,21 +51,27 @@ const NewItem = (props) => {
             <div className="checkbox" />
             <div className="form-container">
                 <input placeholder="Type here..." value={title} onChange={handleInputChange} />
-                <div className="badge-container">
-                    {PRIORITY.map((p) => (
-                        <div
-                            key={p}
-                            className={`p-badge ${p === priority && 'selected'}`}
-                            onClick={() => setPriority(p)}
-                        >
-                            {p}
+                {title && (
+                    <div>
+                        <div className="badge-container">
+                            {PRIORITY.map((p) => (
+                                <div
+                                    key={p}
+                                    className={`p-badge ${p === priority && 'selected'}`}
+                                    onClick={() => setPriority(p)}
+                                >
+                                    {p}
+                                </div>
+                            ))}
                         </div>
-                    ))}
-                </div>
-                <div className="btn-container">
-                    <button className="primary" onClick={handleSave}>Save</button>
-                    <button>Clear</button>
-                </div>
+                        <div className="btn-container">
+                            <button className="primary" onClick={handleSave}>
+                                Save
+                            </button>
+                            <button onClick={clearState}>Clear</button>
+                        </div>
+                    </div>
+                )}
             </div>
         </div>
     );

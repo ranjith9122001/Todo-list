@@ -3,7 +3,7 @@ import TodoListItem from "./TodoListItem/TodoListItem"
 
 
 const TodoList = (props) => {
-    const { list, deleteItem } = props
+    const { list, deleteItem, triggerEdit } = props
     
     if(list.length <=0) {
         return(
@@ -19,6 +19,7 @@ const TodoList = (props) => {
                     item={item}
                     index={index}
                     onDelete={deleteItem}
+                    onEdit={triggerEdit}
                 />
             ))}
         </> 

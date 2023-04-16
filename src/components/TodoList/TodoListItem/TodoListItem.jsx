@@ -1,29 +1,41 @@
-import { useState } from "react"
-import "./TodoListItem.css"
+import { useState } from "react";
+import "./TodoListItem.css";
 
 const TodoListItem = (props) => {
-    const { item, onDelete, index } = props
-    const { title, priority } = item
-    const [isChecked, setChecked] = useState(false)
-    
-    return(   
-        <div className={`item-card ${priority}`}>
-            {isChecked ? (
-                <span className="material-symbols-outlined pointer" onClick={()=> setChecked(false)}>
-                    select_check_box
-                </span>
-            ) : (
-                <span className="checkbox pointer" onClick={() => setChecked(true)} />
-            )}
+  const { item, onEdit, onDelete, index } = props;
+  const { title, priority, id } = item;
+  const [isChecked, setChecked] = useState(false);
 
-            <div className={`card-title ${isChecked && 'strike'}`}>{title}</div>
-            
-            <div className="badge">{priority}</div>
-            <span className="material-symbols-outlined pointer" onClick={() => onDelete(index)}>
-                delete
-            </span>
-        </div>
-    )
-}
+  return (
+    <div className={`item-card ${priority}`}>
+      {isChecked ? (
+        <span
+          className="material-symbols-outlined pointer"
+          onClick={() => setChecked(false)}
+        >
+          select_check_box
+        </span>
+      ) : (
+        <span className="checkbox pointer" onClick={() => setChecked(true)} />
+      )}
 
-export default TodoListItem
+      <div className={`card-title ${isChecked && "strike"}`}>{title}</div>
+
+      <div className="badge">{priority}</div>
+      <span
+        class="material-symbols-outlined pointer edit-icon"
+        onClick={() => onEdit(item)}
+      >
+        edit
+      </span>
+      <span
+        className="material-symbols-outlined pointer"
+        onClick={() => onDelete(id)}
+      >
+        delete
+      </span>
+    </div>
+  );
+};
+
+export default TodoListItem;
